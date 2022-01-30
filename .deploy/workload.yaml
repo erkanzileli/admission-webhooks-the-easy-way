@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook
+  namespace: default
+  labels:
+    app: webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook
+  template:
+    metadata:
+      labels:
+        app: webhook
+    spec:
+      serviceAccountName: webhook-sa
+      containers:
+        - image: webhook-image
+          name: webhook
+          args:
+            - --certs-dir=/app/certs
+          volumeMounts:
+            - name: certs
+              mountPath: /app/certs
+              readOnly: true
+      volumes:
+        - name: certs
+          secret:
+            secretName: webhook-certificate-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook
+  namespace: default
+  labels:
+    app: webhook
+spec:
+  type: ClusterIP
+  ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+  selector:
+    app: webhook

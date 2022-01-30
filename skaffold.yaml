@@ -1,0 +1,22 @@
+# nonk8s
+apiVersion: skaffold/v2beta26
+kind: Config
+build:
+  artifacts:
+    - image: webhook-image
+      docker:
+        dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+      - .deploy/*
+  helm:
+    releases:
+      - name: cert-manager
+        repo: https://charts.jetstack.io
+        remoteChart: cert-manager
+        setValues:
+          installCRDs: true
+        namespace: cert-manager
+        createNamespace: true
+        version: v1.7.0

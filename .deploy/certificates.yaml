@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: self-signer
+  namespace: default
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: webhook-certificate
+  namespace: default
+spec:
+  secretName: webhook-certificate-secret
+  dnsNames:
+    - webhook
+    - webhook.default
+    - webhook.default.svc
+  issuerRef:
+    name: self-signer
