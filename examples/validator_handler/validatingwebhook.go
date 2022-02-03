@@ -1,8 +1,9 @@
-package main
+package validator_handler
 
 import (
 	"context"
 	"fmt"
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/consts"
 	"net/http"
 
 	corev1 "k8s.io/api/core/v1"
@@ -29,21 +30,19 @@ func (v *podValidatingWebhook) Handle(ctx context.Context, req admission.Request
 		return admission.Errored(http.StatusBadRequest, err)
 	}
 
-	anno, found := pod.Annotations[podAnnotationKey]
+	anno, found := pod.Annotations[consts.PodAnnotationKey]
 	if !found {
-		return admission.Denied(fmt.Sprintf("missing annotation %s", podAnnotationKey))
+		return admission.Denied(fmt.Sprintf("missing annotation %s", consts.PodAnnotationKey))
 	}
-	if anno != podAnnotationValue {
-		return admission.Denied(fmt.Sprintf("annotation %s did not have value %q", podAnnotationKey, "foo"))
+	if anno != consts.PodAnnotationValue {
+		return admission.Denied(fmt.Sprintf("annotation %s did not have value %q", consts.PodAnnotationKey, "foo"))
 	}
 
 	return admission.Allowed("")
 }
 
-// podValidatingWebhook implements admission.DecoderInjector.
-// A decoder will be automatically injected.
-
 // InjectDecoder injects the decoder.
+// podValidatingWebhook implements admission.DecoderInjector so a decoder will be automatically injected.
 func (v *podValidatingWebhook) InjectDecoder(d *admission.Decoder) error {
 	v.decoder = d
 	return nil

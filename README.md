@@ -17,3 +17,4 @@
 - [ ] tests
 - [ ] skaffold debugging
 - [ ] templating - kustomize
+- [ ] assemble your webhooks into an order

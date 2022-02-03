@@ -43,6 +43,7 @@ func main() {
 
 	// register webhooks
 	log.Info("registering webhooks to the server")
+
 	hookServer.Register("/handle-mutate-v1-pod", &webhook.Admission{Handler: defaulter_handler.NewPodMutatingWebhook()})
 	hookServer.Register("/handle-validate-v1-pod", &webhook.Admission{Handler: validator_handler.NewPodValidatingWebhook()})
 	hookServer.Register("/mutate-v1-pod", custom_defaulter.NewCustomPodDefaulterWebhook())
