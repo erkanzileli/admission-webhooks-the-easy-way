@@ -1,7 +1,6 @@
 package defaulter_handler_test
 
 import (
-	"encoding/json"
 	"net/http"
 	"testing"
 
@@ -10,8 +9,6 @@ import (
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/util"
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	admissionv1 "k8s.io/api/admission/v1"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
@@ -42,7 +39,7 @@ func TestPodDefaulterHandler_Handle_when_annotation_is_not_exist(t *testing.T) {
 	handler := defaulter_handler.NewPodDefaulterHandler()
 	handler.InjectDecoder(decoder)
 	pod := util.CreatePod()
-	req := newAdmissionReq(pod)
+	req := util.NewAdmissionReq(pod)
 
 	// When
 	response := handler.Handle(nil, req)
@@ -57,7 +54,7 @@ func TestPodDefaulterHandler_Handle_when_annotation_is_exist(t *testing.T) {
 	handler := defaulter_handler.NewPodDefaulterHandler()
 	handler.InjectDecoder(decoder)
 	pod := util.CreatePod(consts.PodAnnotationKey, "bar")
-	req := newAdmissionReq(pod)
+	req := util.NewAdmissionReq(pod)
 
 	// When
 	response := handler.Handle(nil, req)
@@ -71,7 +68,7 @@ func TestPodDefaulterHandler_Handle_when_pod_is_nil(t *testing.T) {
 	// Given
 	handler := defaulter_handler.NewPodDefaulterHandler()
 	handler.InjectDecoder(decoder)
-	req := newAdmissionReq(nil)
+	req := util.NewAdmissionReq(nil)
 	req.Object.Raw = []byte("*")
 
 	// When
@@ -80,15 +77,4 @@ func TestPodDefaulterHandler_Handle_when_pod_is_nil(t *testing.T) {
 	// Then
 	assert.False(t, response.Allowed)
 	assert.EqualValues(t, http.StatusBadRequest, response.Result.Code)
-}
-
-func newAdmissionReq(pod *corev1.Pod) admission.Request {
-	rawPod, _ := json.Marshal(pod)
-	return admission.Request{
-		AdmissionRequest: admissionv1.AdmissionRequest{
-			Object: runtime.RawExtension{
-				Raw: rawPod,
-			},
-		},
-	}
 }

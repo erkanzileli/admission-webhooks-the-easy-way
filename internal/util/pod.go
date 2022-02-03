@@ -1,8 +1,12 @@
 package util
 
 import (
+	"encoding/json"
+	admissionv1 "k8s.io/api/admission/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 func CreatePod(annotations ...string) (pod *corev1.Pod) {
@@ -26,4 +30,15 @@ func CreatePod(annotations ...string) (pod *corev1.Pod) {
 	}
 
 	return
+}
+
+func NewAdmissionReq(pod *corev1.Pod) admission.Request {
+	rawPod, _ := json.Marshal(pod)
+	return admission.Request{
+		AdmissionRequest: admissionv1.AdmissionRequest{
+			Object: runtime.RawExtension{
+				Raw: rawPod,
+			},
+		},
+	}
 }
