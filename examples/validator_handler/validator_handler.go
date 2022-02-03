@@ -3,7 +3,7 @@ package validator_handler
 import (
 	"context"
 	"fmt"
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/consts"
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	"net/http"
 
 	corev1 "k8s.io/api/core/v1"
@@ -11,7 +11,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-// podValidatingWebhook validates Pods
+// CustomPodValidator validates consts.PodAnnotationKey annotation
 type podValidatingWebhook struct {
 	Client  client.Client
 	decoder *admission.Decoder

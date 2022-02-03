@@ -2,14 +2,14 @@ package custom_defaulter
 
 import (
 	"context"
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/consts"
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-// CustomPodDefaulter sets the PodAnnotationKey as PodAnnotationValue if it's not exist
+// CustomPodDefaulter sets the consts.PodAnnotationKey as consts.PodAnnotationValue
 type CustomPodDefaulter struct{}
 
 func NewCustomPodDefaulterWebhook() *admission.Webhook {

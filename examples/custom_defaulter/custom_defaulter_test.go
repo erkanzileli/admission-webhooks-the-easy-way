@@ -1,9 +1,9 @@
 package custom_defaulter_test
 
 import (
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/consts"
 	customDefaulter "github.com/erkanzileli/admission-webhooks-the-easy-way/examples/custom_defaulter"
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/util"
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/util"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

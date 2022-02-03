@@ -1,9 +1,9 @@
 package custom_validator_test
 
 import (
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/consts"
 	customValidator "github.com/erkanzileli/admission-webhooks-the-easy-way/examples/custom_validator"
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/util"
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/util"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
