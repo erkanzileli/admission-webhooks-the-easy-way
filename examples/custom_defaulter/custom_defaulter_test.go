@@ -1,11 +1,12 @@
 package custom_defaulter_test
 
 import (
+	"testing"
+
 	customDefaulter "github.com/erkanzileli/admission-webhooks-the-easy-way/examples/custom_defaulter"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/util"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNewCustomPodDefaulter(t *testing.T) {

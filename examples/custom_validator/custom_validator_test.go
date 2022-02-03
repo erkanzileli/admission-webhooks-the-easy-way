@@ -1,11 +1,12 @@
 package custom_validator_test
 
 import (
+	"testing"
+
 	customValidator "github.com/erkanzileli/admission-webhooks-the-easy-way/examples/custom_validator"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/util"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNewCustomPodValidator(t *testing.T) {

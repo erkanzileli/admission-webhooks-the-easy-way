@@ -3,8 +3,8 @@ package custom_validator
 import (
 	"context"
 	"fmt"
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"

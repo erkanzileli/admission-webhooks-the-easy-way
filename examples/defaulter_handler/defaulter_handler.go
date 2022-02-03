@@ -3,9 +3,9 @@ package defaulter_handler
 import (
 	"context"
 	"encoding/json"
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	"net/http"
 
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
@@ -19,10 +19,10 @@ func NewPodDefaulterHandler() *PodDefaulterHandler {
 	return &PodDefaulterHandler{}
 }
 
-func (a *PodDefaulterHandler) Handle(ctx context.Context, req admission.Request) admission.Response {
+func (h *PodDefaulterHandler) Handle(ctx context.Context, req admission.Request) admission.Response {
 	pod := &corev1.Pod{}
 
-	err := a.decoder.Decode(req, pod)
+	err := h.decoder.Decode(req, pod)
 	if err != nil {
 		return admission.Errored(http.StatusBadRequest, err)
 	}
@@ -42,7 +42,7 @@ func (a *PodDefaulterHandler) Handle(ctx context.Context, req admission.Request)
 
 // InjectDecoder injects the decoder.
 // PodDefaulterHandler implements admission.DecoderInjector so a decoder will be automatically injected.
-func (a *PodDefaulterHandler) InjectDecoder(d *admission.Decoder) error {
-	a.decoder = d
+func (h *PodDefaulterHandler) InjectDecoder(d *admission.Decoder) error {
+	h.decoder = d
 	return nil
 }

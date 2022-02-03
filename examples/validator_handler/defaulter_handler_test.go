@@ -1,11 +1,11 @@
-package defaulter_handler_test
+package validator_handler_test
 
 import (
 	"encoding/json"
 	"net/http"
 	"testing"
 
-	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/defaulter_handler"
+	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/validator_handler"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/util"
 	log "github.com/sirupsen/logrus"
@@ -32,14 +32,28 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 
-func TestNewPodDefaulterHandler(t *testing.T) {
-	handler := defaulter_handler.NewPodDefaulterHandler()
+func TestNewPodValidatorHandler(t *testing.T) {
+	handler := validator_handler.NewPodValidatorHandler()
 	assert.NotNil(t, handler)
 }
 
-func TestPodDefaulterHandler_Handle_when_annotation_is_not_exist(t *testing.T) {
+func TestPodValidatorHandler_Handle_when_annotation_is_exist(t *testing.T) {
 	// Given
-	handler := defaulter_handler.NewPodDefaulterHandler()
+	handler := validator_handler.NewPodValidatorHandler()
+	handler.InjectDecoder(decoder)
+	pod := util.CreatePod(consts.PodAnnotationKey, consts.PodAnnotationValue)
+	req := newAdmissionReq(pod)
+
+	// When
+	response := handler.Handle(nil, req)
+
+	// Then
+	assert.True(t, response.Allowed)
+}
+
+func TestPodValidatorHandler_Handle_when_annotation_is_not_exist(t *testing.T) {
+	// Given
+	handler := validator_handler.NewPodValidatorHandler()
 	handler.InjectDecoder(decoder)
 	pod := util.CreatePod()
 	req := newAdmissionReq(pod)
@@ -48,13 +62,12 @@ func TestPodDefaulterHandler_Handle_when_annotation_is_not_exist(t *testing.T) {
 	response := handler.Handle(nil, req)
 
 	// Then
-	assert.True(t, response.Allowed)
-	assert.Len(t, response.Patches, 1)
+	assert.False(t, response.Allowed)
 }
 
-func TestPodDefaulterHandler_Handle_when_annotation_is_exist(t *testing.T) {
+func TestPodValidatorHandler_Handle_when_annotation_is_different(t *testing.T) {
 	// Given
-	handler := defaulter_handler.NewPodDefaulterHandler()
+	handler := validator_handler.NewPodValidatorHandler()
 	handler.InjectDecoder(decoder)
 	pod := util.CreatePod(consts.PodAnnotationKey, "bar")
 	req := newAdmissionReq(pod)
@@ -63,13 +76,12 @@ func TestPodDefaulterHandler_Handle_when_annotation_is_exist(t *testing.T) {
 	response := handler.Handle(nil, req)
 
 	// Then
-	assert.True(t, response.Allowed)
-	assert.Len(t, response.Patches, 1)
+	assert.False(t, response.Allowed)
 }
 
-func TestPodDefaulterHandler_Handle_when_pod_is_nil(t *testing.T) {
+func TestPodValidatorHandler_Handle_when_pod_is_nil(t *testing.T) {
 	// Given
-	handler := defaulter_handler.NewPodDefaulterHandler()
+	handler := validator_handler.NewPodValidatorHandler()
 	handler.InjectDecoder(decoder)
 	req := newAdmissionReq(nil)
 	req.Object.Raw = []byte("*")

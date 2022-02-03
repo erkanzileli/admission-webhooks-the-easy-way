@@ -2,6 +2,7 @@ package custom_defaulter
 
 import (
 	"context"
+
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/internal/consts"
 	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"

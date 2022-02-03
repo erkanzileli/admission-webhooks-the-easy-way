@@ -2,12 +2,13 @@ package main
 
 import (
 	"flag"
+	"os"
+
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/custom_defaulter"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/custom_validator"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/defaulter_handler"
 	"github.com/erkanzileli/admission-webhooks-the-easy-way/examples/validator_handler"
 	log "github.com/sirupsen/logrus"
-	"os"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
@@ -44,7 +45,7 @@ func main() {
 	// register webhooks
 	log.Info("registering webhooks to the server")
 	hookServer.Register("/handle-mutate-v1-pod", &webhook.Admission{Handler: defaulter_handler.NewPodDefaulterHandler()})
-	hookServer.Register("/handle-validate-v1-pod", &webhook.Admission{Handler: validator_handler.NewPodValidatingWebhook()})
+	hookServer.Register("/handle-validate-v1-pod", &webhook.Admission{Handler: validator_handler.NewPodValidatorHandler()})
 	hookServer.Register("/mutate-v1-pod", custom_defaulter.NewCustomPodDefaulterWebhook())
 	hookServer.Register("/validate-v1-pod", custom_validator.NewCustomPodValidatorWebhook())
 
